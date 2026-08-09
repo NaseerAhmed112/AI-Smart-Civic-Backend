@@ -1,9 +1,7 @@
-import os
 import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import client, initialize_database
@@ -35,9 +33,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-uploads_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "uploads"))
-os.makedirs(uploads_dir, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+# StaticFiles removed — Vercel serverless has no persistent disk.
+# To serve uploaded images, integrate Cloudinary or AWS S3.
 
 app.include_router(complaints, prefix="/api/complaints", tags=["Complaints"])
 app.include_router(analytics, prefix="/api/analytics", tags=["Analytics"])
