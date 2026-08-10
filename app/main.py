@@ -2,6 +2,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pymongo.errors import PyMongoError
 
 from app.config import settings
 from app.database import client, initialize_database
@@ -15,10 +16,14 @@ app.state.mongodb_connected = False
 def startup() -> None:
     try:
         client.admin.command("ping")
-        initialize_database()
         app.state.mongodb_connected = True
-    except Exception:
-        logger.warning("MongoDB is unavailable. Database endpoints will retry when MongoDB becomes reachable.")
+    except PyMongoError:
+        logger.warning("MongoDB is unavailable on startup. Database endpoints will retry when MongoDB becomes reachable.")
+
+    try:
+        initialize_database()
+    except PyMongoError:
+        logger.warning("MongoDB index initialization failed. Database may still be reachable.")
 
 @app.on_event("shutdown")
 def shutdown() -> None:
@@ -50,8 +55,15 @@ app.include_router(analytics, prefix="/api/analytics", tags=["Analytics"])
 
 @app.get("/")
 def root():
+    mongodb_connected = False
+    try:
+        client.admin.command("ping")
+        mongodb_connected = True
+    except PyMongoError:
+        logger.warning("MongoDB health check ping failed.")
+
     return {
         "status": "Online",
         "platform": settings.PROJECT_NAME,
-        "mongodb_connected": app.state.mongodb_connected,
+        "mongodb_connected": mongodb_connected,
     }
