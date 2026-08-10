@@ -1,3 +1,8 @@
+node_modules
+.env
+.env.local
+.DS_Store
+dist
 # Python / FastAPI
 __pycache__/
 *.py[cod]
