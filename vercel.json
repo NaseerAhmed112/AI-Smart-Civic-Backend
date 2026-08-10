@@ -1,7 +1,7 @@
 {
   "functions": {
     "app/main.py": {
-      "runtime": "python3.11"
+      "runtime": "@vercel/python@1.0.0"
     }
   },
   "routes": [
