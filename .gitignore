@@ -1,6 +1,16 @@
 node_modules
 .env
 .env.local
+.env.production
+__pycache__/
+*.pyc
 .DS_Store
+venv/
+uploads/
+app/uploads/
+civic_services.db
+server.log
+server-error.log
+server-test-* 
 dist
 

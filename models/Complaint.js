@@ -1,20 +1,10 @@
 const mongoose = require('mongoose');
-
 const complaintSchema = new mongoose.Schema({
-  location: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  imageUrl: {
-    type: String,
-    default: ''
-  },
-  status: {
-    type: String,
+  location: { type: String, required: true },
+  description: { type: String, required: true },
+  imageUrl: { type: String, default: '' },
+  status: { 
+    type: String, 
     default: 'Pending',
     enum: ['Pending', 'In Progress', 'Resolved']
   },
@@ -23,10 +13,6 @@ const complaintSchema = new mongoose.Schema({
     default: 'Medium',
     enum: ['Low', 'Medium', 'High', 'Critical']
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  createdAt: { type: Date, default: Date.now }
 });
-
 module.exports = mongoose.model('Complaint', complaintSchema);

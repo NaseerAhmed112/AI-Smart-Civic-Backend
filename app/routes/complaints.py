@@ -1,4 +1,5 @@
 import uuid
+from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException, Query, File, UploadFile
 from pymongo.database import Database
 from typing import List, Optional
@@ -36,8 +37,15 @@ async def upload_evidence_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail=f"File size exceeds 5 MB limit ({size_mb} MB uploaded).")
 
     unique_filename = f"{uuid.uuid4()}{ext}"
+    # In Vercel serverless deployment, local filesystem persistence is not reliable.
+    # This endpoint validates image uploads and returns a placeholder path.
+    # Production storage must still be implemented with object storage.
     image_url = f"/uploads/{unique_filename}"
-    return {"image_url": image_url, "filename": unique_filename, "note": "Validated. Integrate Cloudinary or S3 for actual storage."}
+    return {
+        "image_url": image_url,
+        "filename": unique_filename,
+        "note": "Image validated. Replace with persistent object storage integration for production.",
+    }
 
 @router.post("/analyze-preview", response_model=AIAnalysisResult)
 def analyze_preview(data: ComplaintCreate, db: Database = Depends(get_db)):

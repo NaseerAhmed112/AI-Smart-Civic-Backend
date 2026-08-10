@@ -7,7 +7,6 @@ from app.config import settings
 from app.database import client, initialize_database
 from app.routes import complaints, analytics
 
-
 app = FastAPI(title=settings.PROJECT_NAME)
 logger = logging.getLogger(__name__)
 app.state.mongodb_connected = False
@@ -45,9 +44,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# StaticFiles removed — Vercel serverless has no persistent disk.
-# To serve uploaded images, integrate Cloudinary or AWS S3.
 
 app.include_router(complaints, prefix="/api/complaints", tags=["Complaints"])
 app.include_router(analytics, prefix="/api/analytics", tags=["Analytics"])
