@@ -3,22 +3,4 @@ node_modules
 .env.local
 .DS_Store
 dist
-# Python / FastAPI
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.env
-venv/
-.venv/
-*.log
-*.db
-uploads/
-server-error.log
-server.log
-# IDEs
-.vscode/
-.idea/
-# OS
-.DS_Store
-Thumbs.db
+
